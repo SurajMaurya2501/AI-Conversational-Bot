@@ -36,25 +36,25 @@ class FirebaseGemini {
             chats[chats.length - 1] = Content(
               role: "model",
               parts: [
-                Parts(
-                  text:
-                      "${chats[chats.length - 1].parts?.lastOrNull?.text} ${value.output}",
+                Part.text(
+                  "${(chats[chats.length - 1].parts?.last as TextPart?)?.text ?? ''} ${value.output}",
                 ),
               ],
             );
-            messageToSave['user'] = chats[chats.length - 2].parts?.last.text;
+            messageToSave['user'] =
+                (chats[chats.length - 2].parts?.last as TextPart?)?.text;
             messageToSave['model'] =
-                "${chats[chats.length - 1].parts?.lastOrNull?.text}${value.output}";
+                "${(chats[chats.length - 1].parts?.last as TextPart?)?.text ?? ''}${value.output}";
             allChat.removeLast();
             allChat.add(messageToSave);
           } else {
-            messageToSave['user'] = chats.last.parts?.last.text;
+            messageToSave['user'] = (chats.last.parts?.last as TextPart?)?.text;
             chats.add(
               Content(
                 role: "model",
                 parts: [
-                  Parts(
-                    text: value.output,
+                  Part.text(
+                    value.output ?? "",
                   ),
                 ],
               ),
@@ -86,15 +86,20 @@ class FirebaseGemini {
   Future<void> geminiTextAndImage(String text, List<Uint8List> images,
       ScrollController scrollController, BuildContext context) async {
     try {
-      gemini.textAndImage(text: text, images: images).then(
+      gemini.prompt(
+        parts: [
+          Part.text(text),
+          for (var image in images) Part.uint8List(image),
+        ],
+      ).then(
         (value) {
-          messageToSave['user'] = chats.last.parts?.last.text;
+          messageToSave['user'] = (chats.last.parts?.last as TextPart?)?.text;
           messageToSave['model'] = value?.output;
           allChat.add(messageToSave);
           chats.add(
             Content(parts: [
-              Parts(
-                text: value?.output,
+              Part.text(
+                value?.output ?? "",
               ),
             ], role: "model"),
           );
@@ -167,9 +172,7 @@ class FirebaseGemini {
       gemini.chat([
         ...chats,
         Content(parts: [
-          Parts(
-            text: "Give me only a suitable title for above chat",
-          ),
+          Part.text("Give me only a suitable title for above chat"),
         ], role: "user"),
       ]).then(
         (value) {
@@ -215,16 +218,12 @@ class FirebaseGemini {
     for (int i = 0; i < messageList.length; i++) {
       chats.add(
         Content(parts: [
-          Parts(
-            text: messageList[i]["user"],
-          ),
+          Part.text(messageList[i]["user"]),
         ], role: "user"),
       );
       chats.add(
         Content(parts: [
-          Parts(
-            text: messageList[i]["model"],
-          ),
+          Part.text(messageList[i]["model"]),
         ], role: "model"),
       );
     }

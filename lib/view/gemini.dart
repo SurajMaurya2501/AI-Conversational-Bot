@@ -175,7 +175,10 @@ class _GeminiScreenState extends State<GeminiScreen> {
                                                 ),
                                               ),
                                               child: SelectableText(
-                                                content.parts?.last.text ?? '',
+                                                (content.parts?.last
+                                                            as TextPart?)
+                                                        ?.text ??
+                                                    "Sorry Cannot Generate Details!",
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   letterSpacing: 1,
@@ -204,7 +207,9 @@ class _GeminiScreenState extends State<GeminiScreen> {
                                               physics:
                                                   const BouncingScrollPhysics(),
                                               shrinkWrap: true,
-                                              data: content.parts?.last.text ??
+                                              data: (content.parts?.last
+                                                          as TextPart?)
+                                                      ?.text ??
                                                   "Sorry Cannot Generate Details!",
                                               selectable: true,
                                               styleSheet: MarkdownStyleSheet(
@@ -364,9 +369,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
                           Content(
                             role: 'user',
                             parts: [
-                              Parts(
-                                text: searchedText,
-                              ),
+                              Part.text(searchedText),
                             ],
                           ),
                         );
@@ -387,9 +390,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
                           Content(
                             role: 'user',
                             parts: [
-                              Parts(
-                                text: searchedText,
-                              ),
+                              Part.text(searchedText),
                             ],
                           ),
                         );
@@ -453,9 +454,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
                                       Content(
                                         role: 'user',
                                         parts: [
-                                          Parts(
-                                            text: searchedText,
-                                          ),
+                                          Part.text(searchedText),
                                         ],
                                       ),
                                     );
@@ -479,9 +478,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
                                       Content(
                                         role: 'user',
                                         parts: [
-                                          Parts(
-                                            text: searchedText,
-                                          ),
+                                          Part.text(searchedText),
                                         ],
                                       ),
                                     );
