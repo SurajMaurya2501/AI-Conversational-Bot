@@ -383,7 +383,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
                         gemini.scrollToEnd(scrollController, 1500);
                       }
                     } else {
-                      gemini.generateTitle(_selectedIndex);
+                      gemini.generateTitle();
                       if (_controller.text.isNotEmpty) {
                         final searchedText = _controller.text;
                         gemini.chats.add(
@@ -458,8 +458,6 @@ class _GeminiScreenState extends State<GeminiScreen> {
                                         ],
                                       ),
                                     );
-
-                                    _controller.clear();
                                     gemini.showLoading = true;
                                     provider.updateWidget();
 
@@ -468,10 +466,9 @@ class _GeminiScreenState extends State<GeminiScreen> {
                                         [gemini.selectedImage!],
                                         scrollController,
                                         context);
-                                    gemini.scrollToEnd(scrollController, 1500);
                                   }
                                 } else {
-                                  gemini.generateTitle(_selectedIndex);
+                                  gemini.generateTitle();
                                   if (_controller.text.isNotEmpty) {
                                     final searchedText = _controller.text;
                                     gemini.chats.add(
@@ -483,14 +480,15 @@ class _GeminiScreenState extends State<GeminiScreen> {
                                       ),
                                     );
                                     // gemini.messageToSave["user"] = searchedText;
-                                    _controller.clear();
                                     gemini.showLoading = true;
                                     provider.updateWidget();
                                     gemini.geminiStream(gemini.chats, context,
                                         scrollController);
-                                    gemini.scrollToEnd(scrollController, 1500);
                                   }
                                 }
+                                _controller.clear();
+
+                                gemini.scrollToEnd(scrollController, 1500);
                               },
                               icon: const Icon(
                                 Icons.send,
@@ -550,6 +548,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
             onTap: () {
               gemini.generatedTitle = "";
               gemini.chats.clear();
+              Navigator.pop(context);
               setState(() {});
             },
             hoverColor: Colors.grey,
@@ -562,28 +561,29 @@ class _GeminiScreenState extends State<GeminiScreen> {
           const Divider(
             thickness: 0.3,
           ),
-          ListView.builder(
-            padding: const EdgeInsets.all(0.0),
-            shrinkWrap: true,
-            itemCount: gemini.titleLists.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  _selectedIndex = index;
-                  gemini.generatedTitle = gemini.titleLists[_selectedIndex];
-                  gemini.getChats(gemini.titleLists[_selectedIndex], context,
-                      scrollController);
-                  _scaffoldKey.currentState?.closeDrawer();
-                },
-                hoverColor: Colors.grey,
-                title: Text(
-                  gemini.titleLists[index],
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              );
-            },
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(0.0),
+              itemCount: gemini.titleLists.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () {
+                    _selectedIndex = index;
+                    gemini.generatedTitle = gemini.titleLists[_selectedIndex];
+                    gemini.getChats(gemini.titleLists[_selectedIndex], context,
+                        scrollController);
+                    _scaffoldKey.currentState?.closeDrawer();
+                  },
+                  hoverColor: Colors.grey,
+                  title: Text(
+                    gemini.titleLists[index],
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                );
+              },
+            ),
           ),
-          const Spacer(),
+          // const Spacer(),
           ListTile(
               title: Text(
                 _auth.currentUser!.displayName ?? "",

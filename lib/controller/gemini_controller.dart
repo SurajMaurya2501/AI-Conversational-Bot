@@ -167,19 +167,19 @@ class FirebaseGemini {
     }
   }
 
-  String generateTitle(int selectedIndex) {
+  String generateTitle() {
     if (chats.isEmpty) {
-      gemini.chat([
+      gemini.chat(modelName: "gemini-3.1-flash-lite-preview", [
         ...chats,
         Content(parts: [
-          Part.text("Give me only a suitable title for above chat"),
+          Part.text(
+              "Give me a suitable title for given chat message or messages"),
         ], role: "user"),
       ]).then(
         (value) {
           if (value != null) {
             generatedTitle = value.output ?? "";
             titleLists.add(generatedTitle);
-            print("Generated Title : ${value.output}}");
           }
         },
       );
@@ -211,9 +211,9 @@ class FirebaseGemini {
         .collection("topics")
         .doc(title)
         .get();
-    Map<String, dynamic> mapData =
-        documentSnapshot.data() as Map<String, dynamic>;
-    List<dynamic> messageList = mapData["chats"];
+    Map<String, dynamic>? mapData =
+        documentSnapshot.data() as Map<String, dynamic>?;
+    List<dynamic> messageList = mapData?["chats"] ?? [];
 
     for (int i = 0; i < messageList.length; i++) {
       chats.add(
