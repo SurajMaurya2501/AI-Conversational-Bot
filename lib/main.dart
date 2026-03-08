@@ -1,7 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_gemini_ai/provider/message_provider.dart';
-import 'package:firebase_gemini_ai/view/gemini.dart';
-import 'package:firebase_gemini_ai/view/signup.dart';
 import 'package:firebase_gemini_ai/view/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,7 +10,9 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  Gemini.init(apiKey: "${dotenv.env['API_KEY']}");
+  Gemini.init(
+    apiKey: "${dotenv.env['API_KEY']}",
+  );
   runApp(const MyApp());
 }
 

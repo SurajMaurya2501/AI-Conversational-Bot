@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_gemini_ai/controller/gemini_controller.dart';
 import 'package:firebase_gemini_ai/controller/login_controller.dart';
@@ -10,14 +12,14 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class GeminiScreen extends StatefulWidget {
-  const GeminiScreen({super.key});
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
 
   @override
-  State<GeminiScreen> createState() => _GeminiScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _GeminiScreenState extends State<GeminiScreen> {
+class _ChatScreenState extends State<ChatScreen> {
   final gemini = FirebaseGemini();
   final _controller = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -30,10 +32,20 @@ class _GeminiScreenState extends State<GeminiScreen> {
   bool showImage = false;
 
   bool isTitleEmpty = false;
+  final gem = Gemini.instance;
 
   @override
   void initState() {
     _focusNode = FocusNode();
+    gem.listModels().then(
+      (value) {
+        final data = value;
+        data.first.name;
+        for (GeminiModel model in data) {
+          log("Model Name: ${model.name}");
+        }
+      },
+    );
     gemini.getHistory().whenComplete(
       () {
         setState(() {});
@@ -383,7 +395,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
                         gemini.scrollToEnd(scrollController, 1500);
                       }
                     } else {
-                      gemini.generateTitle();
+                      // gemini.generateTitle();
                       if (_controller.text.isNotEmpty) {
                         final searchedText = _controller.text;
                         gemini.chats.add(

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_gemini_ai/view/gemini.dart';
+import 'package:firebase_gemini_ai/view/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class AngelLogin extends StatefulWidget {
@@ -137,7 +137,7 @@ class _AngelLoginState extends State<AngelLogin> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const GeminiScreen(),
+            builder: (context) => const ChatScreen(),
           ),
         );
       },
@@ -167,7 +167,7 @@ class _AngelLoginState extends State<AngelLogin> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const GeminiScreen(),
+          builder: (context) => const ChatScreen(),
         ),
       );
       print("Sign In Successfull");

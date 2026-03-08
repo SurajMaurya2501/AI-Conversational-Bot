@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_gemini_ai/controller/shared_preferences.dart';
-import 'package:firebase_gemini_ai/view/gemini.dart';
+import 'package:firebase_gemini_ai/view/chat_screen.dart';
 import 'package:firebase_gemini_ai/view/signup.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +48,7 @@ class SignUpController {
         sharedPref.storeData("email", email);
         sharedPref.storeData("userName", userCredential.user!.displayName!);
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const GeminiScreen()));
+            MaterialPageRoute(builder: (context) => const ChatScreen()));
 
         print("Login Successfully!");
       }

@@ -27,6 +27,7 @@ class FirebaseGemini {
     try {
       gemini
           .streamChat(
+        modelName: "gemini-3-flash-preview",
         chats,
       )
           .listen(
@@ -63,8 +64,6 @@ class FirebaseGemini {
             allChat.add(messageToSave);
           }
           messageToSave = {};
-          // print("MessageToSave - $messageToSave");
-          // print("allChat - $allChat");
           scrollToEnd(scrollController, 500);
           storeChats(generatedTitle, allChat, context);
           final provider = Provider.of<MessageProvider>(context, listen: false);
@@ -91,6 +90,7 @@ class FirebaseGemini {
           Part.text(text),
           for (var image in images) Part.uint8List(image),
         ],
+        model: "gemini-2.0-flash",
       ).then(
         (value) {
           messageToSave['user'] = (chats.last.parts?.last as TextPart?)?.text;
@@ -117,7 +117,7 @@ class FirebaseGemini {
     }
   }
 
-  scrollToEnd(ScrollController scrollController, int timer) {
+  void scrollToEnd(ScrollController scrollController, int timer) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
@@ -168,12 +168,12 @@ class FirebaseGemini {
   }
 
   String generateTitle() {
-    if (chats.isEmpty) {
-      gemini.chat(modelName: "gemini-3.1-flash-lite-preview", [
+    if (chats.isNotEmpty) {
+      gemini.chat([
         ...chats,
         Content(parts: [
           Part.text(
-              "Give me a suitable title for given chat message or messages"),
+              "Give me a suitable title for given Conversation with minimum words"),
         ], role: "user"),
       ]).then(
         (value) {

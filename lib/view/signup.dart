@@ -1,6 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_gemini_ai/controller/sign_up_controller.dart';
-import 'package:firebase_gemini_ai/view/gemini.dart';
+import 'package:firebase_gemini_ai/view/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class SignUpAndLoginScreen extends StatefulWidget {
